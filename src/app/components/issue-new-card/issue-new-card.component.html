@@ -1,0 +1,18 @@
+<div fxLayout="row">
+    <div id="card-validations">
+        <input [(ngModel)]="cardNumber">
+    </div>
+    <div>
+        <button (click)="validateCard()">Fetch Info</button>
+    </div>
+
+    <div id="card-details">
+        <span *ngIf="errorMessage"> {{errorMessage}}</span>
+        <div *ngIf="cardDetails">
+            <div>{{cardDetails.cardNumber}}</div>
+            <div>{{cardDetails.balance}}</div>
+            <div>{{cardDetails.placeOfIssue}}</div>
+            <div>{{cardDetails.createdTime}}</div>
+        </div>
+    </div>
+</div>
