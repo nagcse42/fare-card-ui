@@ -140,14 +140,13 @@ export class IssueNewCardComponent implements OnInit {
     this.cardService.saveJourneyFlow(journeyFlow)
       .subscribe(
         (response) => {
-          console.log('response received')
           if (response) {
             this.journeyAmount = response;
           }
+          this.cardDetails.balance = this.cardDetails.balance - this.journeyAmount;
           this.errorMessage = undefined;
         },
         (error) => {
-          console.error('Request failed with error')
           if (error && error.error) {
             this.errorMessage = error.error.text;
           }
@@ -155,7 +154,6 @@ export class IssueNewCardComponent implements OnInit {
         () => {
           console.error('Request completed');
         });
-
   }
 
 }

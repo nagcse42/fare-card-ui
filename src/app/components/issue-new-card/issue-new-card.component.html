@@ -1,5 +1,4 @@
 <div fxFlex="100">
-    <span *ngIf="errorMessage"> {{errorMessage}}</span>
     <div fxLayout="row" fxLayoutAlign="space-evenly center">
         <mat-form-field appearance="fill" class="form-field">
             <mat-label>Card Number</mat-label>
@@ -7,6 +6,7 @@
         </mat-form-field>
         <button (click)="validateCard()" mat-raised-button color="primary">Fetch Info</button>
     </div>
+    <span *ngIf="errorMessage"> {{errorMessage}}</span>
     <div fxFlex="100">
         <mat-card class="example-card">
             <div *ngIf="cardDetails">
@@ -27,7 +27,7 @@
 
         </mat-card>
     </div>
-    <div id="travel-joureny" fxFlex="100" fxLayout="row" fxLayoutAlign="space-around center">
+    <div *ngIf="cardDetails" id="travel-joureny" fxFlex="100" fxLayout="row" fxLayoutAlign="space-around center">
         <mat-form-field appearance="fill" fxFlex="20" class="form-field">
             <mat-label>Select Channel</mat-label>
             <mat-select [(ngModel)]="channel">
