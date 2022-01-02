@@ -16,6 +16,8 @@ export class IssueNewCardComponent implements OnInit {
   originStation: any;
   destinationStation: any;
   journeyAmount: any = 0;
+  touchPointDetails: any = [];
+  displayedColumns: string[] = ['id', 'channel', 'entryStation', 'exitStation', 'journeyAmount', 'afterJourneyBalance'];
 
   channelsList: any = [
     {
@@ -71,26 +73,21 @@ export class IssueNewCardComponent implements OnInit {
   }
 
   validateCard() {
-    this.cardService.validatecard(this.cardNumber)
-      .subscribe(
-        (response) => {
-          console.log('response received')
-          if (response) {
-            this.cardDetails = response;
-          }
+    this.cardService.validatecard(this.cardNumber).subscribe(
+      (response) => {
+        console.log('response received')
+        if (response) {
+          this.cardDetails = response;
+        }
 
-          this.errorMessage = undefined;
-        },
-        (error) => {
-          console.error('Request failed with error')
-          if (error && error.error) {
-            this.errorMessage = error.error.text;
-            this.cardDetails = undefined;
-          }
-        },
-        () => {
-          console.error('Request completed');
-        });
+        this.errorMessage = undefined;
+      }, (error) => {
+        console.error('Request failed with error')
+        if (error && error.error) {
+          this.errorMessage = error.error.text;
+          this.cardDetails = undefined;
+        }
+      });
   }
 
   calculateJourneyAmount() {
@@ -100,24 +97,19 @@ export class IssueNewCardComponent implements OnInit {
       channel: this.channel.code
     };
 
-    this.cardService.calculateJourneyAmount(request)
-      .subscribe(
-        (response) => {
-          console.log('response received')
-          if (response) {
-            this.journeyAmount = response;
-          }
-          this.errorMessage = undefined;
-        },
-        (error) => {
-          console.error('Request failed with error')
-          if (error && error.error) {
-            this.errorMessage = error.error.text;
-          }
-        },
-        () => {
-          console.error('Request completed');
-        });
+    this.cardService.calculateJourneyAmount(request).subscribe(
+      (response) => {
+        console.log('response received')
+        if (response) {
+          this.journeyAmount = response;
+        }
+        this.errorMessage = undefined;
+      }, (error) => {
+        console.error('Request failed with error')
+        if (error && error.error) {
+          this.errorMessage = error.error.text;
+        }
+      });
   }
 
   updateJourneyInfo() {
@@ -128,32 +120,27 @@ export class IssueNewCardComponent implements OnInit {
       journeyAmount: this.journeyAmount,
       afterJourneyBalance: this.cardDetails.balance - this.journeyAmount,
       entryPoint: {
-        station: this.originStation.code,
+        station: this.originStation.desc,
         zone: this.originStation.zones
       },
       exitPoint: {
-        station: this.destinationStation.code,
+        station: this.destinationStation.desc,
         zone: this.destinationStation.zones
       }
     }
 
-    this.cardService.saveJourneyFlow(journeyFlow)
-      .subscribe(
-        (response) => {
-          if (response) {
-            this.journeyAmount = response;
-          }
-          this.cardDetails.balance = this.cardDetails.balance - this.journeyAmount;
-          this.errorMessage = undefined;
-        },
-        (error) => {
-          if (error && error.error) {
-            this.errorMessage = error.error.text;
-          }
-        },
-        () => {
-          console.error('Request completed');
-        });
+    this.cardService.saveJourneyFlow(journeyFlow).subscribe(
+      (response) => {
+        if (response) {
+          this.touchPointDetails = response;
+        }
+        this.cardDetails.balance = this.cardDetails.balance - this.journeyAmount;
+        this.errorMessage = undefined;
+      }, (error) => {
+        if (error && error.error) {
+          this.errorMessage = error.error.text;
+        }
+      });
   }
 
 }
