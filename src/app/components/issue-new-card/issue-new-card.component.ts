@@ -39,7 +39,7 @@ export class IssueNewCardComponent implements OnInit {
     {
       code: 'TUB',
       desc: 'Thunder Bay',
-      zones: 'ZONE_1,,ZONE_2'
+      zones: 'ZONE_1,ZONE_2'
     },
     {
       code: 'DDN',
@@ -97,11 +97,14 @@ export class IssueNewCardComponent implements OnInit {
     } else if (!this.channel) {
       this.errorMessage = 'Please select journey channel.';
       return;
+    } else if (this.originStation == this.destinationStation) {
+      this.errorMessage = 'Please select diff stations.';
+      return;
     }
 
     let request = {
-      entryZone: this.originStation.zones,
-      exitZone: this.destinationStation ? this.destinationStation.zones : '',
+      entryZone: this.getMinifiedEntryZone(this.originStation.zones, this.destinationStation.zones),
+      exitZone: this.destinationStation ? this.getMinifiedExitZone(this.originStation.zones, this.destinationStation.zones) : '',
       channel: this.channel.code
     };
 
@@ -134,11 +137,11 @@ export class IssueNewCardComponent implements OnInit {
       afterJourneyBalance: this.cardDetails.balance - this.journeyAmount,
       entryPoint: {
         station: this.originStation.desc,
-        zone: this.originStation.zones
+        zone: this.getMinifiedEntryZone(this.originStation.zones, this.destinationStation.zones)
       },
       exitPoint: {
         station: this.destinationStation ? this.destinationStation.desc : '',
-        zone: this.destinationStation ? this.destinationStation.zones : ''
+        zone: this.destinationStation ? this.getMinifiedExitZone(this.originStation.zones, this.destinationStation.zones) : ''
       }
     }
 
@@ -155,5 +158,36 @@ export class IssueNewCardComponent implements OnInit {
         }
       });
   }
+
+  getMinifiedEntryZone(entryZone: string, exitZone: string) {
+    if (entryZone && exitZone) {
+      let entryZones = entryZone.split(",");
+      if (entryZones.length > 1) {
+        if (entryZones.includes(exitZone)) {
+          return exitZone;
+        } else if (exitZone.endsWith('3')) {
+          return 'ZONE_2'
+        }
+      }
+    }
+
+    return entryZone;
+  }
+
+  getMinifiedExitZone(entryZone: string, exitZone: string) {
+    if (entryZone && exitZone) {
+      let exitZones = exitZone.split(",");
+      if (exitZones.length > 1) {
+        if (exitZones.includes(entryZone)) {
+          return entryZone;
+        } else if (entryZone.endsWith('3')) {
+          return 'ZONE_2'
+        }
+      }
+    }
+
+    return exitZone;
+  }
+
 
 }
