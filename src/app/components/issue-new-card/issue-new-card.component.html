@@ -1,18 +1,66 @@
-<div fxLayout="row">
-    <div id="card-validations">
-        <input [(ngModel)]="cardNumber">
+<div fxFlex="100">
+    <span *ngIf="errorMessage"> {{errorMessage}}</span>
+    <div fxLayout="row" fxLayoutAlign="space-evenly center">
+        <mat-form-field appearance="fill" class="form-field">
+            <mat-label>Card Number</mat-label>
+            <input matInput [(ngModel)]="cardNumber">
+        </mat-form-field>
+        <button (click)="validateCard()" mat-raised-button color="primary">Fetch Info</button>
     </div>
-    <div>
-        <button (click)="validateCard()">Fetch Info</button>
-    </div>
+    <div fxFlex="100">
+        <mat-card class="example-card">
+            <div *ngIf="cardDetails">
+                <mat-card-title>Card Number: {{cardDetails.cardNumber}}</mat-card-title>
+                <mat-card-subtitle>Balance: {{cardDetails.balance}}</mat-card-subtitle>
+                <mat-card-content>
+                    <p>Place of issue : {{cardDetails.placeOfIssue}}</p>
+                </mat-card-content>
+                <mat-divider inset *ngIf="false"></mat-divider>
+                <mat-card-actions *ngIf="false">
+                    <button mat-button>Topup</button>
+                    <button mat-button>SHARE</button>
+                </mat-card-actions>
+                <mat-card-footer *ngIf="false">
+                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                </mat-card-footer>
+            </div>
 
-    <div id="card-details">
-        <span *ngIf="errorMessage"> {{errorMessage}}</span>
-        <div *ngIf="cardDetails">
-            <div>{{cardDetails.cardNumber}}</div>
-            <div>{{cardDetails.balance}}</div>
-            <div>{{cardDetails.placeOfIssue}}</div>
-            <div>{{cardDetails.createdTime}}</div>
-        </div>
+        </mat-card>
+    </div>
+    <div id="travel-joureny" fxFlex="100" fxLayout="row" fxLayoutAlign="space-around center">
+        <mat-form-field appearance="fill" fxFlex="20" class="form-field">
+            <mat-label>Select Channel</mat-label>
+            <mat-select [(ngModel)]="channel">
+                <mat-option *ngFor="let channelItem of channelsList" [value]="channelItem">{{ channelItem.desc }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" fxFlex="20" class="form-field">
+            <mat-label>Select Origin</mat-label>
+            <mat-select [(ngModel)]="originStation">
+                <mat-option *ngFor="let stationItem of stationsList" [value]="stationItem">{{ stationItem.desc }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" fxFlex="20" class="form-field">
+            <mat-label>Select Destination</mat-label>
+            <mat-select [(ngModel)]="destinationStation">
+                <mat-option *ngFor="let stationItem of stationsList" [value]="stationItem">{{ stationItem.desc }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" fxFlex="20" class="form-field">
+            <mat-label>Journey Amount</mat-label>
+            <input readonly matInput [(ngModel)]="journeyAmount">
+        </mat-form-field>
+
+        <button fxFlex="20" class="button-class" (click)="calculateJourneyAmount()" mat-raised-button color="primary">
+            Calculate Amount</button>
+
+        <button fxFlex="20" (click)="updateJourneyInfo()" mat-raised-button color="primary">
+            Update Journey</button>
     </div>
 </div>

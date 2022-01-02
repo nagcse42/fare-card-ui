@@ -9,7 +9,8 @@ import { CardDetails } from '../../models/card-details.model';
 })
 export class CardService {
 
-  baseURL: string = 'api'
+  baseURL: string = 'api/'
+  headers = new HttpHeaders().set('Access-Control-Allow-Origin', '*');
 
   constructor(private http: HttpClient) { }
 
@@ -26,12 +27,15 @@ export class CardService {
   }
 
   validatecard(cardNumber: string): Observable<any> {
+    return this.http.get(this.baseURL + 'card/' + cardNumber, { 'headers': this.headers });
+  }
 
-    const headers = new HttpHeaders()
-      .set('Access-Control-Allow-Origin', '*');
+  calculateJourneyAmount(journeyDetails: any): Observable<any> {
+    return this.http.post(this.baseURL + 'fare/calculation', journeyDetails, { 'headers': this.headers });
+  }
 
-
-    return this.http.get(this.baseURL + 'card/' + cardNumber, { 'headers': headers });
+  saveJourneyFlow(journeyFlow: any): Observable<any> {
+    return this.http.post(this.baseURL + 'save/journey', journeyFlow, { 'headers': this.headers });
   }
 
 }
