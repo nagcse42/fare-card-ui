@@ -91,9 +91,17 @@ export class IssueNewCardComponent implements OnInit {
   }
 
   calculateJourneyAmount() {
+    if (!this.originStation) {
+      this.errorMessage = 'Please select origin station.';
+      return;
+    } else if (!this.channel) {
+      this.errorMessage = 'Please select journey channel.';
+      return;
+    }
+
     let request = {
       entryZone: this.originStation.zones,
-      exitZone: this.destinationStation.zones,
+      exitZone: this.destinationStation ? this.destinationStation.zones : '',
       channel: this.channel.code
     };
 
@@ -113,6 +121,11 @@ export class IssueNewCardComponent implements OnInit {
   }
 
   updateJourneyInfo() {
+    if (this.journeyAmount == 0) {
+      this.errorMessage = 'Please calculate amount first.';
+      return;
+    }
+
     let journeyFlow = {
       cardNumber: this.cardNumber,
       channel: this.channel.code,
@@ -124,8 +137,8 @@ export class IssueNewCardComponent implements OnInit {
         zone: this.originStation.zones
       },
       exitPoint: {
-        station: this.destinationStation.desc,
-        zone: this.destinationStation.zones
+        station: this.destinationStation ? this.destinationStation.desc : '',
+        zone: this.destinationStation ? this.destinationStation.zones : ''
       }
     }
 

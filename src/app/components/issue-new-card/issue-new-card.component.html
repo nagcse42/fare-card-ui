@@ -1,18 +1,20 @@
 <div fxFlex="100">
-    <div fxLayout="row" fxLayoutAlign="space-evenly center">
+    <div id="card-iput" fxFlex="100" fxLayout="row" fxLayoutAlign="space-around center">
         <mat-form-field appearance="fill" class="form-field">
             <mat-label>Card Number</mat-label>
             <input matInput [(ngModel)]="cardNumber">
         </mat-form-field>
         <button (click)="validateCard()" mat-raised-button color="primary">Fetch Info</button>
     </div>
-    <span *ngIf="errorMessage"> {{errorMessage}}</span>
+    <div *ngIf="errorMessage" id="message-area" class="error-message">
+        {{errorMessage}}
+    </div>
     <div fxFlex="100">
         <mat-card class="example-card">
             <div *ngIf="cardDetails">
                 <mat-card-title>Card Number: {{cardDetails.cardNumber}}</mat-card-title>
-                <mat-card-subtitle>Balance: {{cardDetails.balance}}</mat-card-subtitle>
-                <mat-card-content>
+                <mat-card-content class="card-sub-title">
+                    <p>Balance: {{cardDetails.balance}}</p>
                     <p>Place of issue : {{cardDetails.placeOfIssue}}</p>
                 </mat-card-content>
                 <mat-divider inset *ngIf="false"></mat-divider>
